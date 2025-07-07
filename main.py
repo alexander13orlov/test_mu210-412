@@ -227,8 +227,11 @@ def main():
         if not client.connect():
             logger.error("Не удалось подключиться к устройству")
             return
-        
         logger.info("Соединение установлено успешно")
+        # 0. Установка типа выхода
+        if not write_register(client, currentDO["type"], output_type["genImp"]):
+            return
+        
         preset(client, 500, 20)
         preset(client, 1000, 30)
         preset(client, 2000, 60)
