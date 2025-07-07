@@ -162,7 +162,7 @@ currentDO = MU412_PARAM["do3"]
 
 def preset(client, freq, numImp, fc=16):
    
-
+    preset2(client, 2, 1)
      # 0. Установка типа выхода
     # if not write_register(client, currentDO["type"], output_type["logLevel"], function_code=fc):
     #     return
@@ -181,7 +181,7 @@ def preset(client, freq, numImp, fc=16):
         return
         # Ожидание обнуления регистра currentDO["impNumberAddr"]
     logger.info(f"Ожидание {numImp/freq+1}сек обнуления регистра impNumberAddr...")
-    time.sleep(numImp/freq+0.1)
+    time.sleep(numImp/freq+0.5) # прибавка +0.5сек критична, когда было +0,1 он пропускал следующую генерацию, 0.5сек вроде хватает
 
 def preset2(client, freq, numImp, fc=16):
    
@@ -229,17 +229,15 @@ def main():
             return
         
         logger.info("Соединение установлено успешно")
-        
-        preset(client, 60000, 4)
-        preset2(client, 2, 1) 
-        time.sleep(1)
-        preset(client, 60000, 3)
-        # time.sleep(2)
-        preset2(client, 2, 1) 
-        time.sleep(1)
-        preset(client, 60000, 2)
-        preset2(client, 2, 1) 
-             
+        preset(client, 500, 20)
+        preset(client, 1000, 30)
+        preset(client, 2000, 60)
+        preset(client, 4000, 120)
+        preset(client, 8000, 200)
+        preset(client, 16000, 400)
+        preset(client, 30000, 800)
+        preset(client, 50000, 900)
+        preset(client, 60000, 1000)
         logger.info("Все операции успешно завершены!")
 
     except Exception as e:
